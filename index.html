@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Sockets Assignment 3</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+    </head>
+
+    <body>
+
+        <div class="page-wrapper">
+            <main id="main">
+
+                <h1 id="title">To-Do List </h1>
+
+
+                <form action="">  
+                    <span> Sign-in!</span></br>
+                    <input type="text" id="list_login" autocomplete="off"/>
+                    <button id="btn_lst_login">Sign In</button>
+                    <button id="btn_lst_logout">Sign Out</button>
+                </form>
+
+                </div>
+                <div id="userDiv">
+                    <h3>Users</h3>
+                    <ul id="users">
+                    
+                    </ul><br class="clear">
+                </div>
+
+                <section id="addListItem">
+                    <p>
+                        <span>Add List Item</span></br>
+                        <input type="text" id="list_item" autocomplete="off"/>
+                        <button id="btn_list">Add</button>
+                    </p> 
+                </section>
+                <div id="listDiv">
+                    <h3>To-Do List</h3>
+                    <ul id="items">
+                    
+                    </ul><br class="clear">
+                </div>
+            </main>
+        </div>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+        <script>
+
+//Event Listeners
+            $(function(){
+                var socket = io();
+                $('form').submit(function(e){
+                    e.preventDefault();
+                    let listObject = {};
+                    listObject.lister_login = $('#list_login').val();
+                    listObject.listText = $('#list_item').val();
+                    socket.emit('start_List', listObject.lister_login);
+
+                });
+
+                $('btn_lst_login').click(function(){
+                   socket.emit('start_List', $('#list_login').val());
+                });
+                
+                $('btn_lst_logout').click(function(){
+                  //  socket.emit('leave_List', $('#list_login').val());
+                  //socket.disconnect();
+                });
+
+//Socket Listens
+                socket.on('start_List', function(lister){
+                    console.log(lister);
+                    $('#users').append($('<li>').text(lister));
+                });
+
+                /*
+                socket.on()
+
+                socket.on()
+
+                */
+
+            });
+        
+        </script>
+
+    </body>
+
+    </html>
