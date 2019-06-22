@@ -63,13 +63,21 @@
 
                 });
 
-                $('btn_lst_login').click(function(){
+                $('btn_lst_login').click(function(){//Whenever I used #btn_lst_login it would double my login results
                    socket.emit('start_List', $('#list_login').val());
                 });
+
+                $('btn_list').click(function(){
+                    socket.emit('add_Item', $('#list_item').val());
+                });
+
+                $('#items').click(function(){
+                    socket.emit('claim',$('#list_item').val());
+                });
                 
-                $('btn_lst_logout').click(function(){
-                  //  socket.emit('leave_List', $('#list_login').val());
-                  //socket.disconnect();
+                $('#btn_lst_logout').click(function(){
+                  socket.emit('leave_List', $('#list_login').val());
+                  socket.disconnect();
                 });
 
 //Socket Listens
@@ -78,12 +86,24 @@
                     $('#users').append($('<li>').text(lister));
                 });
 
-                /*
-                socket.on()
+                
+                socket.on('add_Item', function(add){
+                    console.log('List Item Added: ' + add);
+                    $('#items').append($('<li>').text(add.listText));
+                });
+                
+                
+                socket.on('claim', function(move){
+                    console.log( 'Item Claimed');
+                    $('#users').append($('<li>').text(move.listText + " claimed by " + move.lister_login));
+                });
 
-                socket.on()
+                socket.on('leave_List', function(lister){
+                    console.log(lister);
+                    $('#users').append($('<li>').text(lister + " Has Left"));
+                });
 
-                */
+                
 
             });
         
